@@ -20,10 +20,15 @@
   var nav = document.getElementById("nav");
   var navToggle = document.getElementById("navToggle");
   var navLinks = document.getElementById("navLinks");
+  var scrollProgress = document.querySelector("#scrollProgress span");
 
   function onScroll() {
     if (window.scrollY > 24) nav.classList.add("is-scrolled");
     else nav.classList.remove("is-scrolled");
+    if (scrollProgress) {
+      var maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      scrollProgress.style.width = (maxScroll > 0 ? (window.scrollY / maxScroll) * 100 : 0) + "%";
+    }
   }
   window.addEventListener("scroll", onScroll, { passive: true });
   onScroll();
