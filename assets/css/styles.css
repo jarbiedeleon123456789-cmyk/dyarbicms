@@ -1175,7 +1175,8 @@ footer{
 .panel{ background: var(--paper-2); border: 1px solid var(--line); border-radius: var(--radius-m); box-shadow: var(--shadow-soft); }
 .panel-head{ display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 20px 22px; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
 .panel-head h3{ font-family: var(--ff-display); font-size: 16.5px; font-weight: 600; }
-.panel-head h3 svg{ width: 18px; height: 18px; vertical-align: -4px; flex: none; }
+.panel-head h3 > svg,
+.profile-sec > svg{ width: 18px !important; height: 18px !important; display: inline-block; vertical-align: -4px; flex: none; }
 .panel-head .sub{ font-size: 13px; color: var(--ink-soft); margin-top: 2px; }
 .panel-body{ padding: 22px; }
 .panel + .panel{ margin-top: 22px; }
