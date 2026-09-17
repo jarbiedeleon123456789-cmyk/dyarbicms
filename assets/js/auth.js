@@ -41,6 +41,7 @@
                 if (profile) {
                   user = Object.assign({}, profile, { id: profile.id });
                   localStorage.setItem("sc_user", JSON.stringify(user));
+                  DB.setSession(user.id);
                 }
                 return { ok: true, user: user };
               });
