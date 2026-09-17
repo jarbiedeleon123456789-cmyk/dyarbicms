@@ -32,7 +32,21 @@
               localStorage.setItem("sc_user", JSON.stringify(user));
               DB.setSession(user.id);
             }
-            return { ok: true, user: user };
+            if (!user) return { ok: true, user: user };
+            return fetch(strapiBase + "/api/users?filters[email][$eq]=" + encodeURIComponent(user.email), {
+              headers: { "Content-Type": "application/json", Authorization: "Bearer " + (body.jwt || "") }
+            }).then(function (profileRes) {
+              return profileRes.json().then(function (profileBody) {
+                var profile = profileBody && profileBody.data && profileBody.data[0];
+                if (profile) {
+                  user = Object.assign({}, profile, { id: profile.id });
+                  localStorage.setItem("sc_user", JSON.stringify(user));
+                }
+                return { ok: true, user: user };
+              });
+            }).catch(function () {
+              return { ok: true, user: user };
+            });
           });
         }).catch(function (err) {
           return { ok: false, message: err.message || "Email or password is incorrect." };
