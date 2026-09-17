@@ -188,6 +188,15 @@
   });
 
   /* ------------------------ SCROLL REVEAL ------------------------ */
+  var cinematicPhoto = document.querySelector("[data-cinematic-photo]");
+  if (cinematicPhoto && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    window.addEventListener("scroll", function () {
+      var rect = cinematicPhoto.getBoundingClientRect();
+      var progress = Math.max(-1, Math.min(1, (window.innerHeight * 0.5 - (rect.top + rect.height * 0.5)) / (window.innerHeight + rect.height)));
+      cinematicPhoto.style.setProperty("--photo-shift", (progress * 18).toFixed(2) + "px");
+    }, { passive: true });
+  }
+
   var revealEls = document.querySelectorAll("[data-reveal]");
   if ("IntersectionObserver" in window) {
     var io = new IntersectionObserver(function (entries) {
