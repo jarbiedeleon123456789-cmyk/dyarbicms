@@ -120,6 +120,7 @@ h1,h2,h3,h4,p{ margin: 0; }
   text-decoration: none;
   white-space: nowrap;
 }
+.btn > svg{ width: 18px !important; height: 18px !important; display: block; flex: none; }
 .btn-primary{
   background: var(--amber);
   color: var(--forest);
