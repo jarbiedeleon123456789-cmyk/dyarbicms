@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ayusan.PH — Barangay Skilled Workers Directory</title>
+<meta name="description" content="Ayusan.PH helps residents find trusted repair workers and barangay support for every fix, from small household repairs to skilled technical jobs.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/styles.css">
+<style>
+  /* small landing-only tweaks */
+  .hero-visual{ height: 480px; }
+  .hero-photo-frame{ position:absolute; inset:0; }
+  .feature-visual.has-photo{ background:var(--forest); padding:0; min-height:380px; }
+  .feature-visual.has-photo img{ width:100%; height:100%; object-fit:cover; min-height:380px; opacity:.92; }
+  @media (max-width:900px){ .hero-visual{ height: 340px; } }
+</style>
+</head>
+<body>
+
+<!-- ============================== NAV ============================== -->
+<header class="nav" id="nav">
+  <div class="container">
+    <a href="#top" class="brand">
+      <span class="brand-mark">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14.7 6.3a1 1 0 0 1 0 1.4l-7 7a1 1 0 0 1-1.4-1.4l7-7a1 1 0 0 1 1.4 0Z" fill="#E3A83A"/><path d="M18.5 3.5a4 4 0 0 0-5.4 5.4l-8.6 8.6a2 2 0 1 0 2.8 2.8l8.6-8.6a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.2-2.2 2.6-2.6a4 4 0 0 0-.6-.6Z" fill="#F5F1E6" fill-opacity=".9"/></svg>
+      </span>
+      <span class="brand-name">Ayusan.PH</span>
+    </a>
+    <nav class="nav-links" id="navLinks">
+      <a href="#directory">Directory</a>
+      <a href="#how">How it works</a>
+      <a href="#about">About the program</a>
+      <a href="#announcements">Announcements</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <div class="nav-actions">
+      <a href="login.html" class="btn btn-outline">Log in</a>
+      <a href="register.html" class="btn btn-primary">Sign up free</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ============================== HERO ============================== -->
+<section class="hero" id="top">
+  <div class="container">
+    <div class="hero-copy" id="heroCopy">
+      <span class="eyebrow-tag"><span class="dot"></span>Ayusan.PH — kasi may ayos pa sa bawat sira.</span>
+      <h1>
+        <span class="line"><span>Dito sa Ayusan,</span></span>
+        <span class="line"><span>walang problemang</span></span>
+        <span class="line"><span>hindi maaayos.</span></span>
+      </h1>
+      <p class="lede">Ayusan.PH connects residents to trusted skilled workers and barangay support — so every repair, fix, and service request gets handled with less stress and more confidence.</p>
+      <div class="hero-cta">
+        <a href="register.html" class="btn btn-primary">Ipa-Ayos Na</a>
+        <a href="#directory" class="btn btn-ghost-dark">Browse the directory</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat"><b data-count="48">0</b><span>Verified workers</span></div>
+        <div class="hero-stat"><b data-count="6">0</b><span>Skill categories</span></div>
+        <div class="hero-stat"><b data-count="6">0</b><span>Barangays live</span></div>
+      </div>
+    </div>
+
+    <div class="hero-visual" id="heroVisual">
+      <div class="hero-photo-frame"><img src="assets/img/hero-welder.jpg" alt="Barangay welder at work, sparks flying off a metal fabrication job"></div>
+      <div class="hv-layer hv-card" data-parallax="18" style="left:4%; top:8%;">
+        <div class="hv-top">
+          <div class="hv-avatar">RD</div>
+          <div>
+            <div class="hv-name">Ramon Dela Cruz</div>
+            <div class="hv-role">Brgy. Guinobatan</div>
+          </div>
+          <div class="hv-verified">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4 10-10" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Verified
+          </div>
+        </div>
+        <div class="hv-tags">
+          <span class="hv-chip">Electronics</span>
+          <span class="hv-chip">TV &amp; Appliance</span>
+        </div>
+        <div class="hv-rating">
+          <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.2 1.4 6.3-5.6-3.4-5.6 3.4 1.4-6.3-4.8-4.2 6.4-.6z"/></svg>
+          <span>4.9 · 32 jobs</span>
+        </div>
+      </div>
+      <div class="hv-layer hv-badge" data-parallax="10" style="left:6%; bottom:7%; top:auto;">Ticket #SC-2481 accepted</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== MARQUEE ============================== -->
+<div class="marquee-strip">
+  <div class="marquee-track" id="marqueeTrack"></div>
+</div>
+
+<!-- ============================== HOW IT WORKS ============================== -->
+<section class="section-pad" id="how">
+  <div class="container">
+    <div class="section-head" data-reveal>
+      <span class="eyebrow-tag"><span class="dot"></span>How it works</span>
+      <h2>From "does anyone know a technician?" to a ticket number.</h2>
+      <p>Four steps, whether you're a resident, a worker, or barangay staff.</p>
+    </div>
+    <div class="steps">
+      <div class="step"><span class="step-num">1</span><h3>Create a free account</h3><p>Sign up as a resident or register as a skilled worker in minutes.</p></div>
+      <div class="step"><span class="step-num">2</span><h3>Get matched</h3><p>Residents post a request; it's routed to workers with the right skill.</p></div>
+      <div class="step"><span class="step-num">3</span><h3>Track the job</h3><p>Both sides follow status — pending, accepted, working, completed.</p></div>
+      <div class="step"><span class="step-num">4</span><h3>Rate &amp; build a record</h3><p>Completed jobs build a public, ratable history for every worker.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== FEATURE: FOR WORKERS (photo) ============================== -->
+<section class="section-pad">
+  <div class="container">
+    <div class="feature-row">
+      <div class="feature-copy" data-reveal>
+        <span class="eyebrow-tag"><span class="dot"></span>For skilled workers</span>
+        <h3>Your own job feed, filtered to what you actually do.</h3>
+        <p>Log in and see only the requests that match your skill category and area — no more scrolling through jobs you can't take.</p>
+        <ul class="feature-list">
+          <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4 10-10" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Requests filtered automatically by your specialty</li>
+          <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4 10-10" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Track jobs across Available, Pending, and Working</li>
+          <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4 10-10" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Toggle your availability so requests only reach you when free</li>
+        </ul>
+        <a href="register.html" class="btn btn-outline" style="margin-top:22px;">Register as a worker</a>
+      </div>
+      <div class="feature-visual has-photo" data-reveal>
+        <img src="assets/img/worker-grinder.jpg" alt="Technician grinding a metal part on a workshop lathe, sparks flying">
+      </div>
+    </div>
+
+    <div class="feature-row is-reverse">
+      <div class="feature-copy" data-reveal>
+        <span class="eyebrow-tag"><span class="dot"></span>For residents</span>
+        <h3>Submit a request in minutes, follow it with a ticket number.</h3>
+        <p>Describe the job once. It reaches every matching verified worker in your barangay, and you can watch its status change in your own feed.</p>
+        <ul class="feature-list">
+          <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4 10-10" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Search and filter workers by skill and barangay</li>
+          <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4 10-10" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>See real ratings from past completed jobs</li>
+          <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4 10-10" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Rate the job once it's done</li>
+        </ul>
+      </div>
+      <div class="feature-visual" data-reveal>
+        <div class="fv-mock">
+          <div class="fv-row"><div class="hv-avatar" style="width:34px;height:34px;font-size:12px;">MA</div><div style="flex:1;"><div class="fv-bar w80"></div></div></div>
+          <div class="fv-bar w50" style="margin-top:10px;"></div>
+          <div class="fv-bar w30" style="margin-top:8px;"></div>
+          <div class="fv-track"><i></i></div>
+          <div class="fv-steps"><span class="done">Pending</span><span class="done">Accepted</span><span>Working</span><span>Done</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== DIRECTORY PREVIEW ============================== -->
+<section class="section-pad" id="directory" style="background:var(--paper-2); border-top:1px solid var(--line); border-bottom:1px solid var(--line);">
+  <div class="container">
+    <div class="directory-head" data-reveal>
+      <div class="section-head" style="margin-bottom:0;">
+        <span class="eyebrow-tag"><span class="dot"></span>Directory preview</span>
+        <h2>A few of the workers already listed.</h2>
+        <p>Log in to request one directly, or see the full list once you have an account.</p>
+      </div>
+      <div class="filter-row" id="filterRow"></div>
+    </div>
+    <div class="ticket-grid" id="ticketGrid"></div>
+    <div class="directory-more"><a href="register.html" class="btn btn-primary">Create a free account to request</a></div>
+  </div>
+</section>
+
+<!-- ============================== ABOUT / AUDIENCE ============================== -->
+<section class="section-pad" id="about">
+  <div class="container">
+    <div class="section-head" data-reveal>
+      <span class="eyebrow-tag"><span class="dot"></span>About the program</span>
+      <h2>Built for three people in the same barangay.</h2>
+      <p>SkillConnect isn't a marketplace — it's a record the barangay keeps, made useful for everyone who touches it.</p>
+    </div>
+    <div class="audience-grid">
+      <div class="audience-card">
+        <div class="audience-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2 4 5v6c0 5 3.4 9 8 11 4.6-2 8-6 8-11V5l-8-3Z" stroke="#E3A83A" stroke-width="2" stroke-linejoin="round"/></svg></div>
+        <h3>Residents</h3>
+        <p>Find someone to trust without asking three neighbors first.</p>
+        <ul>
+          <li>Search by skill and barangay</li>
+          <li>See ratings from past jobs</li>
+          <li>Submit a request in minutes</li>
+        </ul>
+      </div>
+      <div class="audience-card">
+        <div class="audience-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M14.7 6.3a1 1 0 0 1 0 1.4l-7 7a1 1 0 0 1-1.4-1.4l7-7a1 1 0 0 1 1.4 0Z" stroke="#E3A83A" stroke-width="2"/></svg></div>
+        <h3>Skilled workers</h3>
+        <p>Turn informal repair work into a listed, ratable profile.</p>
+        <ul>
+          <li>Free registration and verification</li>
+          <li>Requests routed to your skill and area</li>
+          <li>A public record of completed jobs</li>
+        </ul>
+      </div>
+      <div class="audience-card">
+        <div class="audience-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M3 10.5 12 3l9 7.5M5 9.5V21h14V9.5" stroke="#E3A83A" stroke-width="2" stroke-linejoin="round"/></svg></div>
+        <h3>Barangay &amp; PESO staff</h3>
+        <p>Run the program from one dashboard instead of loose paper records.</p>
+        <ul>
+          <li>Verify and manage worker accounts</li>
+          <li>Analytics on demand by skill and area</li>
+          <li>Assign, track, and audit every request</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== ANNOUNCEMENTS ============================== -->
+<section class="section-pad" id="announcements" style="background:var(--paper-2); border-top:1px solid var(--line); border-bottom:1px solid var(--line);">
+  <div class="container">
+    <div class="section-head" data-reveal>
+      <span class="eyebrow-tag"><span class="dot"></span>Announcements</span>
+      <h2>What's new with the program.</h2>
+    </div>
+    <div class="announce-grid" id="announceGrid"></div>
+  </div>
+</section>
+
+<!-- ============================== TESTIMONIALS ============================== -->
+<section class="section-pad">
+  <div class="container">
+    <div class="section-head" data-reveal>
+      <span class="eyebrow-tag"><span class="dot"></span>Testimonials</span>
+      <h2>What people in the barangay are saying.</h2>
+    </div>
+    <div class="testi-wrap">
+      <div class="testi-track" id="testiTrack"></div>
+      <div class="testi-nav">
+        <button id="testiPrev" aria-label="Previous"><svg viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <button id="testiNext" aria-label="Next"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== FAQ ============================== -->
+<section class="section-pad" id="faq" style="background:var(--paper-2); border-top:1px solid var(--line); border-bottom:1px solid var(--line);">
+  <div class="container">
+    <div class="section-head" data-reveal>
+      <span class="eyebrow-tag"><span class="dot"></span>FAQ</span>
+      <h2>Common questions.</h2>
+    </div>
+    <div class="faq-list" id="faqList"></div>
+  </div>
+</section>
+
+<!-- ============================== CTA BAND ============================== -->
+<section class="section-pad">
+  <div class="container">
+    <div class="cta-band" data-reveal>
+      <h2>Ready to stop asking around the barangay?</h2>
+      <p>It takes less than two minutes to create an account — as a resident or as a skilled worker.</p>
+      <div class="hero-cta">
+        <a href="register.html" class="btn btn-primary">Create a free account</a>
+        <a href="login.html" class="btn btn-ghost-dark">I already have one</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== FOOTER ============================== -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#top" class="brand" style="text-decoration:none;">
+          <span class="brand-mark" style="width:34px;height:34px;border-radius:9px;background:var(--forest);display:inline-grid;place-items:center;"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14.7 6.3a1 1 0 0 1 0 1.4l-7 7a1 1 0 0 1-1.4-1.4l7-7a1 1 0 0 1 1.4 0Z" fill="#E3A83A"/><path d="M18.5 3.5a4 4 0 0 0-5.4 5.4l-8.6 8.6a2 2 0 1 0 2.8 2.8l8.6-8.6a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.2-2.2 2.6-2.6a4 4 0 0 0-.6-.6Z" fill="#F5F1E6" fill-opacity=".9"/></svg></span>
+          <span class="brand-name" style="color:var(--ink);">SkillConnect</span>
+        </a>
+        <p>A community program of the Barangay LGU and PESO, Oriental Mindoro.</p>
+      </div>
+      <div class="footer-col"><h5>Platform</h5><ul>
+        <li><a href="#directory">Directory</a></li>
+        <li><a href="#how">How it works</a></li>
+        <li><a href="register.html">Sign up</a></li>
+        <li><a href="login.html">Log in</a></li>
+      </ul></div>
+      <div class="footer-col"><h5>Program</h5><ul>
+        <li><a href="#about">About</a></li>
+        <li><a href="#announcements">Announcements</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ul></div>
+      <div class="footer-col"><h5>Contact</h5><ul>
+        <li><a href="tel:+639170000000">0917 000 0000</a></li>
+        <li><a href="mailto:peso@barangay.gov.ph">peso@barangay.gov.ph</a></li>
+        <li>Barangay Hall, Oriental Mindoro</li>
+      </ul></div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Ayusan.PH · Sa bawat barangay, may ayos.</span>
+      <div class="footer-social">
+        <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="none"><path d="M14 9h3V6h-3a4 4 0 0 0-4 4v2H7v3h3v6h3v-6h3l1-3h-4v-2a1 1 0 0 1 1-1Z" fill="currentColor"/></svg></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/db.js"></script>
+<script src="assets/js/landing.js"></script>
+<script src="assets/js/chatbot.js"></script>
+</body>
+</html>

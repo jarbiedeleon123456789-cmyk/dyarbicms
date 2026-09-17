@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create an account — SkillConnect</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+
+<div class="auth-shell">
+  <div class="auth-visual" style="background-image:url('assets/img/workshop.jpg');">
+    <a href="index.html" class="brand">
+      <span class="brand-mark"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14.7 6.3a1 1 0 0 1 0 1.4l-7 7a1 1 0 0 1-1.4-1.4l7-7a1 1 0 0 1 1.4 0Z" fill="#E3A83A"/><path d="M18.5 3.5a4 4 0 0 0-5.4 5.4l-8.6 8.6a2 2 0 1 0 2.8 2.8l8.6-8.6a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.2-2.2 2.6-2.6a4 4 0 0 0-.6-.6Z" fill="#F5F1E6" fill-opacity=".9"/></svg></span>
+      <span class="brand-name">Ayusan.PH</span>
+    </a>
+    <div class="quote">
+      <h2>Turn informal repair work into a listed, ratable profile.</h2>
+      <p>Free registration and verification at the barangay or PESO desk. Requests get routed straight to your skill and area.</p>
+    </div>
+  </div>
+
+  <div class="auth-form-wrap">
+    <div class="auth-card">
+      <a href="index.html" class="brand">
+        <span class="brand-mark" style="background:var(--forest);width:34px;height:34px;border-radius:9px;display:grid;place-items:center;"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14.7 6.3a1 1 0 0 1 0 1.4l-7 7a1 1 0 0 1-1.4-1.4l7-7a1 1 0 0 1 1.4 0Z" fill="#E3A83A"/><path d="M18.5 3.5a4 4 0 0 0-5.4 5.4l-8.6 8.6a2 2 0 1 0 2.8 2.8l8.6-8.6a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.2-2.2 2.6-2.6a4 4 0 0 0-.6-.6Z" fill="#F5F1E6" fill-opacity=".9"/></svg></span>
+        <span class="brand-name" style="color:var(--ink);">Ayusan.PH</span>
+      </a>
+      <h1>Create your account</h1>
+      <p class="sub">Free for residents and workers alike.</p>
+
+      <div class="auth-error" id="authError">Something went wrong.</div>
+
+      <form id="registerForm">
+        <div class="field">
+          <label>I am a…</label>
+          <div class="role-picker">
+            <input type="radio" name="role" id="roleCustomer" value="customer" checked><label for="roleCustomer">Resident</label>
+            <input type="radio" name="role" id="roleWorker" value="worker"><label for="roleWorker">Skilled worker</label>
+          </div>
+        </div>
+        <div class="field">
+          <label>Full name</label>
+          <input type="text" name="name" required placeholder="Juan Dela Cruz">
+        </div>
+        <div class="field">
+          <label>Email address</label>
+          <input type="email" name="email" required placeholder="you@example.com">
+        </div>
+        <div class="field">
+          <label>Password</label>
+          <input type="password" name="password" required minlength="6" placeholder="At least 6 characters">
+        </div>
+        <div class="field">
+          <label>Barangay</label>
+          <select name="barangay" id="barangaySelect"></select>
+        </div>
+        <div class="field">
+          <label>Contact number</label>
+          <input type="tel" name="phone" required placeholder="09XX XXX XXXX">
+        </div>
+        <div class="field" id="skillField" style="display:none;">
+          <label>Skill category</label>
+          <select name="skillCategory" id="skillSelect"></select>
+        </div>
+        <div class="field" id="bioField" style="display:none;">
+          <label>Short bio</label>
+          <textarea name="bio" placeholder="What kind of repair jobs do you take?"></textarea>
+        </div>
+        <button class="btn btn-primary btn-block" type="submit">Create account</button>
+        <p class="form-note" id="workerNote" style="display:none;">New worker accounts start as <b>pending verification</b> — visit the barangay/PESO desk with a valid ID to appear in the public directory.</p>
+      </form>
+
+      <p class="auth-foot">Already have an account? <a href="login.html">Log in</a></p>
+    </div>
+  </div>
+</div>
+
+<script src="assets/js/db.js"></script>
+<script src="assets/js/auth.js"></script>
+<script>
+  Auth.redirectIfLoggedIn();
+
+  var barangaySelect = document.getElementById("barangaySelect");
+  barangaySelect.innerHTML = DB.BARANGAYS.map(function (b) { return "<option value='" + b + "'>" + b + "</option>"; }).join("");
+  var skillSelect = document.getElementById("skillSelect");
+  skillSelect.innerHTML = DB.SKILL_CATEGORIES.map(function (s) { return "<option value='" + s + "'>" + s + "</option>"; }).join("");
+
+  var skillField = document.getElementById("skillField");
+  var bioField = document.getElementById("bioField");
+  var workerNote = document.getElementById("workerNote");
+  document.querySelectorAll('input[name="role"]').forEach(function (r) {
+    r.addEventListener("change", function () {
+      var isWorker = r.value === "worker" && r.checked;
+      if (r.checked) {
+        skillField.style.display = r.value === "worker" ? "flex" : "none";
+        bioField.style.display = r.value === "worker" ? "flex" : "none";
+        workerNote.style.display = r.value === "worker" ? "block" : "none";
+      }
+    });
+  });
+
+  var form = document.getElementById("registerForm");
+  var err = document.getElementById("authError");
+
+  form.addEventListener("submit", async function (e) {
+    e.preventDefault();
+    var data = Object.fromEntries(new FormData(form).entries());
+    var res = await Auth.register(data);
+    if (!res.ok) {
+      err.textContent = res.message;
+      err.classList.add("is-visible");
+      return;
+    }
+    window.location.href = Auth.homeFor(res.user.role || data.role || "customer");
+  });
+</script>
+<script src="assets/js/chatbot.js"></script>
+</body>
+</html>

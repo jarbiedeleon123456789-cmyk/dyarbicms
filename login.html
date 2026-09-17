@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Log in — SkillConnect</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+
+<div class="auth-shell">
+  <div class="auth-visual" style="background-image:url('assets/img/worker-grinder.jpg');">
+    <a href="index.html" class="brand">
+      <span class="brand-mark"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14.7 6.3a1 1 0 0 1 0 1.4l-7 7a1 1 0 0 1-1.4-1.4l7-7a1 1 0 0 1 1.4 0Z" fill="#E3A83A"/><path d="M18.5 3.5a4 4 0 0 0-5.4 5.4l-8.6 8.6a2 2 0 1 0 2.8 2.8l8.6-8.6a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.2-2.2 2.6-2.6a4 4 0 0 0-.6-.6Z" fill="#F5F1E6" fill-opacity=".9"/></svg></span>
+      <span class="brand-name">Ayusan.PH</span>
+    </a>
+    <div class="quote">
+      <h2>"Now the barangay sends requests straight to my phone."</h2>
+      <p>Jun Marasigan, Welder, Brgy. Bayanan I — one of the technicians already working through SkillConnect.</p>
+    </div>
+  </div>
+
+  <div class="auth-form-wrap">
+    <div class="auth-card">
+      <a href="index.html" class="brand">
+        <span class="brand-mark" style="background:var(--forest);width:34px;height:34px;border-radius:9px;display:grid;place-items:center;"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14.7 6.3a1 1 0 0 1 0 1.4l-7 7a1 1 0 0 1-1.4-1.4l7-7a1 1 0 0 1 1.4 0Z" fill="#E3A83A"/><path d="M18.5 3.5a4 4 0 0 0-5.4 5.4l-8.6 8.6a2 2 0 1 0 2.8 2.8l8.6-8.6a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.2-2.2 2.6-2.6a4 4 0 0 0-.6-.6Z" fill="#F5F1E6" fill-opacity=".9"/></svg></span>
+        <span class="brand-name" style="color:var(--ink);">Ayusan.PH</span>
+      </a>
+      <h1>Welcome back</h1>
+      <p class="sub">Log in as a resident, a skilled worker, or barangay staff.</p>
+
+      <div class="auth-error" id="authError">Email or password is incorrect.</div>
+
+      <form id="loginForm">
+        <div class="field">
+          <label>Email address</label>
+          <input type="email" name="email" required placeholder="you@example.com">
+        </div>
+        <div class="field">
+          <label>Password</label>
+          <input type="password" name="password" required placeholder="••••••••">
+        </div>
+        <button class="btn btn-primary btn-block" type="submit">Log in</button>
+      </form>
+
+      <p class="auth-foot">New to SkillConnect? <a href="register.html">Create an account</a></p>
+
+      <div class="demo-box">
+        <b>Try a demo account:</b><br>
+        Resident — maria@gmail.com / customer123<br>
+        Worker — ramon@skillconnect.ph / worker123<br>
+        Admin — admin@skillconnect.ph / admin123<br>
+        <button type="button" id="fillDemo">Fill resident demo login</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="assets/js/db.js"></script>
+<script src="assets/js/auth.js"></script>
+<script>
+  Auth.redirectIfLoggedIn();
+
+  var form = document.getElementById("loginForm");
+  var err = document.getElementById("authError");
+
+  form.addEventListener("submit", async function (e) {
+    e.preventDefault();
+    var data = Object.fromEntries(new FormData(form).entries());
+    var res = await Auth.login(data.email, data.password);
+    if (!res.ok) {
+      err.textContent = res.message;
+      err.classList.add("is-visible");
+      return;
+    }
+    window.location.href = Auth.homeFor(res.user.role || "customer");
+  });
+
+  document.getElementById("fillDemo").addEventListener("click", function () {
+    form.email.value = "maria@gmail.com";
+    form.password.value = "customer123";
+  });
+</script>
+<script src="assets/js/chatbot.js"></script>
+</body>
+</html>
