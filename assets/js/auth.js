@@ -13,7 +13,8 @@
   var Auth = {
     login: function (email, password) {
       if (DB.isStrapiMode && DB.isStrapiMode()) {
-        return fetch((window.STRAPI_API_URL || "http://localhost:1337") + "/api/auth/local", {
+        var strapiBase = (window.STRAPI_API_URL || localStorage.getItem("sc_strapi_url") || "http://localhost:1337").replace(/\/+$/, "");
+        return fetch(strapiBase + "/api/auth/local", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ identifier: email, password: password })
@@ -24,6 +25,9 @@
             }
             if (body && body.jwt) localStorage.setItem("sc_jwt", body.jwt);
             var user = body && body.user ? Object.assign({}, body.user, { id: body.user.id }) : null;
+            if (user && (user.role === "authenticated" || (user.role && typeof user.role === "object"))) {
+              user.role = "customer";
+            }
             if (user) {
               localStorage.setItem("sc_user", JSON.stringify(user));
               DB.setSession(user.id);
@@ -45,19 +49,14 @@
 
     register: function (payload) {
       if (DB.isStrapiMode && DB.isStrapiMode()) {
-        return fetch((window.STRAPI_API_URL || "http://localhost:1337") + "/api/auth/local/register", {
+        var strapiBase = (window.STRAPI_API_URL || localStorage.getItem("sc_strapi_url") || "http://localhost:1337").replace(/\/+$/, "");
+        return fetch(strapiBase + "/api/auth/local/register", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             username: payload.email,
             email: payload.email,
-            password: payload.password,
-            name: payload.name,
-            phone: payload.phone,
-            barangay: payload.barangay,
-            role: payload.role,
-            skillCategory: payload.skillCategory,
-            bio: payload.bio
+            password: payload.password
           })
         }).then(function (res) {
           return res.json().then(function (body) {
@@ -66,6 +65,9 @@
             }
             if (body && body.jwt) localStorage.setItem("sc_jwt", body.jwt);
             var user = body && body.user ? Object.assign({}, body.user, { id: body.user.id }) : null;
+            if (user && (user.role === "authenticated" || (user.role && typeof user.role === "object"))) {
+              user.role = "customer";
+            }
             if (user) {
               localStorage.setItem("sc_user", JSON.stringify(user));
               DB.setSession(user.id);

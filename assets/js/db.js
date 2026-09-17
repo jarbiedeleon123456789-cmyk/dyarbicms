@@ -11,7 +11,11 @@
   "use strict";
 
   var STORE_KEY = "skillconnect_v2";
-  var STRAPI_API = (global.STRAPI_API_URL || "http://localhost:1337");
+  function getStrapiBaseUrl() {
+    var configured = global.STRAPI_API_URL || localStorage.getItem("sc_strapi_url") || "http://localhost:1338";
+    return String(configured).replace(/\/+$/, "");
+  }
+  var STRAPI_API = getStrapiBaseUrl();
 
   var SKILL_CATEGORIES = ["Electronics", "Appliance Repair", "Electrical", "Welding", "Plumbing", "Small Engine Repair"];
 
@@ -399,7 +403,9 @@
   }
 
   function isStrapiMode() {
-    return String(localStorage.getItem("sc_use_strapi") || "").toLowerCase() === "true" || Boolean(global.STRAPI_API_URL);
+    var enabled = String(localStorage.getItem("sc_use_strapi") || "").toLowerCase() === "true";
+    var hasUrl = Boolean(global.STRAPI_API_URL || localStorage.getItem("sc_strapi_url"));
+    return enabled || hasUrl;
   }
 
   function apiHeaders() {
@@ -411,9 +417,10 @@
 
   function apiRequest(path, options) {
     options = options || {};
+    var baseUrl = getStrapiBaseUrl();
     var headers = Object.assign({}, apiHeaders(), options.headers || {});
     var finalOptions = Object.assign({}, options, { headers: headers });
-    return fetch(STRAPI_API + path, finalOptions).then(function (res) {
+    return fetch(baseUrl + path, finalOptions).then(function (res) {
       if (!res.ok) {
         return res.json().then(function (body) {
           var msg = body && body.error && body.error.message ? body.error.message : "Request failed.";
@@ -463,6 +470,46 @@
     }
   }
 
+  var STRAPI_COLLECTIONS = {
+    users: "/api/users?populate=*",
+    requests: "/api/requests?populate=*",
+    announcements: "/api/announcements?populate=*"
+  };
+
+  var strapiSyncLock = {};
+
+  function syncStrapiCollection(key, customPath, mapper) {
+    if (!isStrapiMode() || strapiSyncLock[key]) return;
+    var path = customPath || STRAPI_COLLECTIONS[key] || null;
+    if (!path) return;
+
+    strapiSyncLock[key] = true;
+    apiRequest(path, { method: "GET" }).then(function (res) {
+      var rows = res && res.data ? res.data : (Array.isArray(res) ? res : []);
+      var next = rows.map(function (item) {
+        return mapper ? mapper(item) : item;
+      });
+      var data = read();
+      data[key] = next;
+      write(data);
+    }).catch(function () {
+      // Keep the local mock dataset as the fallback until the Strapi API is reachable.
+    }).then(function () {
+      strapiSyncLock[key] = false;
+    });
+  }
+
+  function syncStrapiState() {
+    if (!isStrapiMode()) return;
+    syncStrapiCollection("users", STRAPI_COLLECTIONS.users, normalizeStrapiUser);
+    syncStrapiCollection("requests", STRAPI_COLLECTIONS.requests, normalizeStrapiRequest);
+    syncStrapiCollection("announcements", STRAPI_COLLECTIONS.announcements, function (item) {
+      if (!item) return item;
+      var data = item.attributes ? item.attributes : item;
+      return Object.assign({}, data, { id: item.id || data.id || data._id || null });
+    });
+  }
+
   var DB = {
     SKILL_CATEGORIES: SKILL_CATEGORIES,
     BARANGAYS: BARANGAYS,
@@ -491,36 +538,22 @@
     normalizeStrapiRequest: normalizeStrapiRequest,
     getUsers: function () {
       if (isStrapiMode()) {
-        return apiRequest("/api/users?populate=*", { method: "GET" }).then(function (res) {
-          if (!res || !Array.isArray(res)) return [];
-          return (res.data || res).map(normalizeStrapiUser);
-        }).catch(function () { return read().users; });
+        syncStrapiCollection("users", STRAPI_COLLECTIONS.users, normalizeStrapiUser);
       }
       return read().users;
     },
     getUserById: function (id) {
       if (isStrapiMode()) {
-        return apiRequest("/api/users/" + id + "?populate=*", { method: "GET" }).then(function (res) {
-          return normalizeStrapiUser(res && res.data ? res.data : res);
-        }).catch(function () { return read().users.find(function (u) { return u.id === id; }) || null; });
+        syncStrapiCollection("users", STRAPI_COLLECTIONS.users, normalizeStrapiUser);
       }
-      return read().users.find(function (u) { return u.id === id; }) || null;
+      return read().users.find(function (u) { return String(u.id) === String(id); }) || null;
     },
     getUserByEmail: function (email) {
       email = String(email || "").trim().toLowerCase();
       if (isStrapiMode()) {
-        return apiRequest("/api/users?populate=*", { method: "GET" }).then(function (res) {
-          var users = (res && res.data ? res.data : res) || [];
-          var found = users.find(function (u) {
-            var item = normalizeStrapiUser(u);
-            return String(item.email || "").toLowerCase() === email;
-          });
-          return found ? normalizeStrapiUser(found) : null;
-        }).catch(function () {
-          return read().users.find(function (u) { return u.email.toLowerCase() === email; }) || null;
-        });
+        syncStrapiCollection("users", STRAPI_COLLECTIONS.users, normalizeStrapiUser);
       }
-      return read().users.find(function (u) { return u.email.toLowerCase() === email; }) || null;
+      return read().users.find(function (u) { return String(u.email || "").toLowerCase() === email; }) || null;
     },
     createUser: function (user) {
       var data = read();
@@ -539,6 +572,9 @@
       }
       data.users.push(user);
       write(data);
+      if (isStrapiMode()) {
+        syncStrapiCollection("users", STRAPI_COLLECTIONS.users, normalizeStrapiUser);
+      }
       return user;
     },
     updateUser: function (id, patch) {
@@ -547,9 +583,17 @@
       if (!u) return null;
       Object.assign(u, patch);
       write(data);
+      if (isStrapiMode()) {
+        syncStrapiCollection("users", STRAPI_COLLECTIONS.users, normalizeStrapiUser);
+      }
       return u;
     },
-    getWorkers: function () { return read().users.filter(function (u) { return u.role === "worker"; }); },
+    getWorkers: function () {
+      if (isStrapiMode()) {
+        syncStrapiCollection("users", STRAPI_COLLECTIONS.users, normalizeStrapiUser);
+      }
+      return read().users.filter(function (u) { return u.role === "worker"; });
+    },
 
     // ---- worker portfolio (credibility) ------------------------------
     addCertificate: function (workerId, cert) {
@@ -578,10 +622,20 @@
     },
 
     // ---- requests ----------------------------------------------------
-    getRequests: function () { return read().requests.slice().sort(function (a, b) { return new Date(b.createdAt) - new Date(a.createdAt); }); },
-    getRequestsByCustomer: function (customerId) { return DB.getRequests().filter(function (r) { return r.customerId === customerId; }); },
-    getRequestsByWorker: function (workerId) { return DB.getRequests().filter(function (r) { return r.workerId === workerId; }); },
-    getRequestById: function (id) { return read().requests.find(function (r) { return r.id === id; }) || null; },
+    getRequests: function () {
+      if (isStrapiMode()) {
+        syncStrapiCollection("requests", STRAPI_COLLECTIONS.requests, normalizeStrapiRequest);
+      }
+      return read().requests.slice().sort(function (a, b) { return new Date(b.createdAt) - new Date(a.createdAt); });
+    },
+    getRequestsByCustomer: function (customerId) { return DB.getRequests().filter(function (r) { return String(r.customerId) === String(customerId); }); },
+    getRequestsByWorker: function (workerId) { return DB.getRequests().filter(function (r) { return String(r.workerId) === String(workerId); }); },
+    getRequestById: function (id) {
+      if (isStrapiMode()) {
+        syncStrapiCollection("requests", STRAPI_COLLECTIONS.requests, normalizeStrapiRequest);
+      }
+      return read().requests.find(function (r) { return String(r.id) === String(id); }) || null;
+    },
     createRequest: function (req) {
       var data = read();
       req.id = uid("req");
@@ -598,6 +652,9 @@
       }
       data.requests.push(req);
       write(data);
+      if (isStrapiMode()) {
+        syncStrapiCollection("requests", STRAPI_COLLECTIONS.requests, normalizeStrapiRequest);
+      }
       return req;
     },
     updateRequest: function (id, patch) {
@@ -606,16 +663,31 @@
       if (!r) return null;
       Object.assign(r, patch);
       write(data);
+      if (isStrapiMode()) {
+        syncStrapiCollection("requests", STRAPI_COLLECTIONS.requests, normalizeStrapiRequest);
+      }
       return r;
     },
     deleteRequest: function (id) {
       var data = read();
       data.requests = data.requests.filter(function (x) { return x.id !== id; });
       write(data);
+      if (isStrapiMode()) {
+        syncStrapiCollection("requests", STRAPI_COLLECTIONS.requests, normalizeStrapiRequest);
+      }
     },
 
     // ---- announcements -----------------------------------------------
-    getAnnouncements: function () { return read().announcements; },
+    getAnnouncements: function () {
+      if (isStrapiMode()) {
+        syncStrapiCollection("announcements", STRAPI_COLLECTIONS.announcements, function (item) {
+          if (!item) return item;
+          var data = item.attributes ? item.attributes : item;
+          return Object.assign({}, data, { id: item.id || data.id || data._id || null });
+        });
+      }
+      return read().announcements;
+    },
 
     // ---- session -----------------------------------------------------
     getSession: function () { return read().session; },
@@ -631,7 +703,15 @@
     },
     getCurrentUser: function () {
       var sid = DB.getSession();
-      return sid ? DB.getUserById(sid) : null;
+      if (!sid) return null;
+      var localUser = DB.getUserById(sid);
+      if (localUser) return localUser;
+      try {
+        var strapiUser = JSON.parse(localStorage.getItem("sc_user") || "null");
+        return strapiUser && String(strapiUser.id) === String(sid) ? strapiUser : null;
+      } catch (e) {
+        return null;
+      }
     }
   };
 

@@ -4,6 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Create an account — SkillConnect</title>
+<script>
+  window.STRAPI_API_URL = "http://localhost:1337";
+  localStorage.setItem("sc_use_strapi", "true");
+  localStorage.setItem("sc_strapi_url", window.STRAPI_API_URL);
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -80,7 +85,7 @@
 </div>
 
 <script src="assets/js/db.js"></script>
-<script src="assets/js/auth.js"></script>
+<script src="assets/js/auth.js?v=2"></script>
 <script>
   Auth.redirectIfLoggedIn();
 
