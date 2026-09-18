@@ -470,6 +470,7 @@
     var data = raw.attributes ? raw.attributes : raw;
     var obj = Object.assign({}, data, {
       id: raw.id || data.id || data._id || null,
+      documentId: raw.documentId || data.documentId || null,
       photos: Array.isArray(data.photos) ? data.photos.map(function (p) { return p.url ? (p.url.startsWith("http") ? p.url : STRAPI_API + p.url) : p; }) : (data.photos || []),
       customerId: data.customer && data.customer.id ? data.customer.id : data.customerId || null,
       workerId: data.worker && data.worker.id ? data.worker.id : data.workerId || null
@@ -682,7 +683,15 @@
       Object.assign(r, patch);
       write(data);
       if (isStrapiMode()) {
-        syncStrapiCollection("requests", STRAPI_COLLECTIONS.requests, normalizeStrapiRequest);
+        var documentId = r.documentId || r.id;
+        apiRequest("/api/requests/" + encodeURIComponent(documentId), {
+          method: "PUT",
+          body: JSON.stringify({ data: patch })
+        }).then(function () {
+          syncStrapiCollection("requests", STRAPI_COLLECTIONS.requests, normalizeStrapiRequest);
+        }).catch(function () {
+          // Keep the local state responsive if the API permission is not enabled yet.
+        });
       }
       return r;
     },
