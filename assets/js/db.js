@@ -404,7 +404,19 @@
 
   function isStrapiMode() {
     var enabled = String(localStorage.getItem("sc_use_strapi") || "").toLowerCase() === "true";
-    var hasUrl = Boolean(global.STRAPI_API_URL || localStorage.getItem("sc_strapi_url"));
+    var configuredUrl = global.STRAPI_API_URL || localStorage.getItem("sc_strapi_url") || "";
+    var hasUrl = Boolean(configuredUrl);
+    if (hasUrl) {
+      try {
+        var apiHost = new URL(configuredUrl, global.location.href).hostname;
+        var pageHost = global.location.hostname;
+        var localApi = apiHost === "localhost" || apiHost === "127.0.0.1";
+        var localPage = !pageHost || pageHost === "localhost" || pageHost === "127.0.0.1";
+        if (localApi && !localPage) return false;
+      } catch (e) {
+        return false;
+      }
+    }
     return enabled || hasUrl;
   }
 

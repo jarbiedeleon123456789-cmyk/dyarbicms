@@ -5,11 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ayusan.PH — Barangay Skilled Workers Directory</title>
 <meta name="description" content="Ayusan.PH helps residents find trusted repair workers and barangay support for every fix, from small household repairs to skilled technical jobs.">
-<script>
-  window.STRAPI_API_URL = "http://localhost:1337";
-  localStorage.setItem("sc_use_strapi", "true");
-  localStorage.setItem("sc_strapi_url", window.STRAPI_API_URL);
-</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -276,7 +271,11 @@
     </div>
     <div class="builder-feature" data-reveal>
       <div class="builder-photo" data-cinematic-photo>
-        <img src="assets/img/builder-dyarbe.jpg" alt="Dyarbe Deleon, builder of Ayusan.PH">
+        <div class="builder-gallery">
+          <img class="builder-image-main" src="assets/img/builder-dyarbe.jpg" alt="Dyarbe Deleon, builder of Ayusan.PH">
+          <img class="builder-image-secondary builder-image-two" src="assets/img/builder-dyarbe-02.jpg" alt="Dyarbe Deleon portrait">
+          <img class="builder-image-secondary builder-image-three" src="assets/img/builder-dyarbe-03.jpg" alt="Dyarbe Deleon portrait">
+        </div>
         <span class="builder-photo-label">AYUSAN.PH · BUILT FROM THE GROUND UP</span>
       </div>
       <div class="builder-copy">
