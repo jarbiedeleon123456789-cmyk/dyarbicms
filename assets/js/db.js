@@ -19,6 +19,7 @@
     return String(configured).replace(/\/+$/, "");
   }
   var STRAPI_API = getStrapiBaseUrl();
+  var STRAPI_REMOTE_MARKER = "sc_strapi_remote_v1";
 
   var SKILL_CATEGORIES = ["Electronics", "Appliance Repair", "Electrical", "Welding", "Plumbing", "Small Engine Repair"];
 
@@ -389,6 +390,10 @@
   }
 
   function read() {
+    if (isStrapiMode() && localStorage.getItem(STRAPI_REMOTE_MARKER) !== "true") {
+      localStorage.removeItem(STORE_KEY);
+      localStorage.setItem(STRAPI_REMOTE_MARKER, "true");
+    }
     var raw = null;
     try { raw = localStorage.getItem(STORE_KEY); } catch (e) { raw = null; }
     if (!raw) {
@@ -511,6 +516,7 @@
       var data = read();
       data[key] = next;
       write(data);
+      global.dispatchEvent(new CustomEvent("sc:strapi-sync", { detail: { key: key } }));
     }).catch(function () {
       // Keep the local mock dataset as the fallback until the Strapi API is reachable.
     }).then(function () {

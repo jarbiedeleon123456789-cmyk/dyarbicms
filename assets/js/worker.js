@@ -10,6 +10,9 @@
   var me = DB.coordsOf(user);
 
   window.addEventListener("sc:section", function (e) { go(e.detail); });
+  window.addEventListener("sc:strapi-sync", function (e) {
+    if (e.detail && (e.detail.key === "users" || e.detail.key === "requests")) renderJobFeed();
+  });
   go("jobfeed");
 
   function go(section) {
