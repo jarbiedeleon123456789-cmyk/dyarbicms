@@ -678,7 +678,7 @@
     },
     updateRequest: function (id, patch) {
       var data = read();
-      var r = data.requests.find(function (x) { return x.id === id; });
+      var r = data.requests.find(function (x) { return String(x.id) === String(id); });
       if (!r) return null;
       Object.assign(r, patch);
       write(data);
