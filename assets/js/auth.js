@@ -10,10 +10,17 @@
     admin: "admin.html"
   };
 
+  function getStrapiBaseUrl() {
+    var defaultUrl = window.location && window.location.hostname !== "localhost" && window.location.hostname !== "127.0.0.1"
+      ? "https://skillconnect-api-l18c.onrender.com"
+      : "http://localhost:1337";
+    return (window.STRAPI_API_URL || localStorage.getItem("sc_strapi_url") || defaultUrl).replace(/\/+$/, "");
+  }
+
   var Auth = {
     login: function (email, password) {
       if (DB.isStrapiMode && DB.isStrapiMode()) {
-        var strapiBase = (window.STRAPI_API_URL || localStorage.getItem("sc_strapi_url") || "http://localhost:1337").replace(/\/+$/, "");
+        var strapiBase = getStrapiBaseUrl();
         return fetch(strapiBase + "/api/auth/local", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -64,7 +71,7 @@
 
     register: function (payload) {
       if (DB.isStrapiMode && DB.isStrapiMode()) {
-        var strapiBase = (window.STRAPI_API_URL || localStorage.getItem("sc_strapi_url") || "http://localhost:1337").replace(/\/+$/, "");
+        var strapiBase = getStrapiBaseUrl();
         return fetch(strapiBase + "/api/auth/local/register", {
           method: "POST",
           headers: { "Content-Type": "application/json" },

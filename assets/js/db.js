@@ -12,7 +12,10 @@
 
   var STORE_KEY = "skillconnect_v2";
   function getStrapiBaseUrl() {
-    var configured = global.STRAPI_API_URL || localStorage.getItem("sc_strapi_url") || "http://localhost:1338";
+    var defaultUrl = global.location && global.location.hostname !== "localhost" && global.location.hostname !== "127.0.0.1"
+      ? "https://skillconnect-api-l18c.onrender.com"
+      : "http://localhost:1337";
+    var configured = global.STRAPI_API_URL || localStorage.getItem("sc_strapi_url") || defaultUrl;
     return String(configured).replace(/\/+$/, "");
   }
   var STRAPI_API = getStrapiBaseUrl();
@@ -405,6 +408,9 @@
   function isStrapiMode() {
     var enabled = String(localStorage.getItem("sc_use_strapi") || "").toLowerCase() === "true";
     var configuredUrl = global.STRAPI_API_URL || localStorage.getItem("sc_strapi_url") || "";
+    if (!configuredUrl && global.location && global.location.hostname !== "localhost" && global.location.hostname !== "127.0.0.1") {
+      configuredUrl = "https://skillconnect-api-l18c.onrender.com";
+    }
     var hasUrl = Boolean(configuredUrl);
     if (hasUrl) {
       try {
